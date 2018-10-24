@@ -6,5 +6,4 @@
 check the example directory for a quick guide of the scripts
 the scripts work properky with  Version: v2.16.0
 
--  NEST simulator Documentation - Read the Docs
--  https://media.readthedocs.org/pdf/nest-simulator-sg/latest/nest-simulator-sg.pdf
+-  NEST simulator Documentation - [Read the Docs](https://media.readthedocs.org/pdf/nest-simulator-sg/latest/nest-simulator-sg.pdf)
