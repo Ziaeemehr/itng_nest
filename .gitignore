@@ -1,1 +1,6 @@
 .ipynb_checkpoints/
+help/
+*.gdf
+data/
+test.py
+
