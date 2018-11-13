@@ -1,5 +1,12 @@
 # brunel_delta_nest.py
 
+# Abolfazl Ziaeemehr
+# Institute for Advanced Studies in
+# Basic Sciences (IASBS)
+# tel: +98 3315 2148
+# github.com/ziaeemehr
+# a.ziaeemehr@gmail.com
+
 
 import nest 
 import nest.raster_plot
