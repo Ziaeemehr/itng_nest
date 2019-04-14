@@ -21,7 +21,6 @@ msdrange2 = range(msd + n_vp + 1, msd + 1 + 2 * n_vp)
 nest.SetKernelStatus({'grng_seed': msd + n_vp,
                       'rng_seeds': msdrange2})
 
-
 startbuild = time()
 
 # simulation parameters
@@ -117,6 +116,7 @@ node_info = nest.GetStatus(nodes_ex+nodes_in)
 local_nodes = [(ni['global_id'], ni['vp']) 
                for ni in node_info if ni['local']]
 for gid, vp in local_nodes: 
+    print gid, vp
     nest.SetStatus([gid], {'V_m': pyrngs[vp].uniform(-theta, theta)})
 
 

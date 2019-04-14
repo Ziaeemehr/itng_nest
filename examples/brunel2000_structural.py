@@ -32,7 +32,7 @@ class Brunel2000(object):
     simtime = 1000.0
     delay = 1.5  # synaptic delay in ms
 
-    g = 5.0  # ratio inhibitory weight/excitatory weight
+    g = 4.0  # ratio inhibitory weight/excitatory weight
     eta = 2.0  # external rate relative to threshold rate
     epsilon = 0.1
 
@@ -42,10 +42,10 @@ class Brunel2000(object):
     N_neurons = NE + NI  # number of neurons in total
     N_rec = 50  # record from 50 neurons
     
-    tauMem = 20.0  # time constant of membrane potential in ms
+    tau_m = 20.0  # time constant of membrane potential in ms
     theta = 20.0  # membrane threshold potential in mV
     neuron_params = {"C_m": 1.0,
-                    "tau_m": tauMem,
+                    "tau_m": tau_m,
                     "t_ref": 2.0,
                     "E_L": 0.0,
                     "V_reset": 0.0,
@@ -91,7 +91,7 @@ class Brunel2000(object):
         self.CE = int(self.epsilon * self.NE)  # number of excitatory synapses per neuron
         self.CI = int(self.epsilon * self.NI)  # number of inhibitory synapses per neuron
         C_tot = int(self.CI + self.CE)  # total number of synapses per neuron
-        nu_th = self.theta / (self.J * self.CE * self.tauMem)
+        nu_th = self.theta / (self.J * self.CE * self.tau_m)
         nu_ex = self.eta * nu_th
         p_rate = 1000.0 * nu_ex * self.CE
 

@@ -3,4 +3,5 @@ help/
 *.gdf
 data/
 test.py
-
+*.png
+*.pdf

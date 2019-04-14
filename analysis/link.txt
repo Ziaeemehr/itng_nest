@@ -1,2 +1,0 @@
-http://neuralensemble.org/NeuroTools/
-https://elephant.readthedocs.io/en/latest/overview.html
