@@ -5,3 +5,6 @@ data/
 test.py
 *.png
 *.pdf
+*.txt
+.vscode/
+
