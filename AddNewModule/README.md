@@ -1,7 +1,4 @@
-[link](https://github.com/nest/nestml)
-[extension_modules](https://nest.github.io/nest-simulator/extension_modules)
-
-### Adding paths to the .bashrc file
+## Adding paths to the .bashrc file
 This is the most important step. With out adding the path you get lots of 
 error saying the header files did not find.
 suppose you have installed nest here:
@@ -106,3 +103,7 @@ nest.Install("mymodel")
 
 ### Further reading
 For an in-depth introduction to the underlying modeling language NESTML, please refer to the [NESTML language documentation](https://github.com/nest/nestml/blob/master/doc/nestml_language.md).
+
+
+-  ### [nestml](https://github.com/nest/nestml)
+-  ### [extension_modules](https://nest.github.io/nest-simulator/extension_modules)
