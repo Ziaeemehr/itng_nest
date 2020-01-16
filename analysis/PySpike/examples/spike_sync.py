@@ -41,10 +41,10 @@ x1, y1 = f.get_plottable_data(averaging_window_size=50)
 plt.plot(x1, y1, '-k', lw=2.5, label="averaged SPIKE-Sync profile")
 plt.legend(loc='lower right')
 
-f_direct = spk.spike_sync(spike_trains) #interval=[0,4000]
+f_direct = spk.spike_sync(spike_trains, interval=[0,4000])
 
 print "Average from spike_sync_profile :", f.avrg()
-print "directly from spike_sync : ", f_direct
+print "directly from spike_sync        :", f_direct
 
 
 plt.subplot(212)

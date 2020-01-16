@@ -13,7 +13,7 @@ suppose you have installed nest here:
 export NEST_INSTALL_DIR=/home/username/path_to_your/nest-simulator-2.18.0_build
 export NEST_MODULE_PATH=//home/username/path_to_your/nest-simulator-2.18.0_build/lib/nest:$NEST_MODULE_PATH
 export SLI_PATH=/home/username/path_to_your/nest-simulator-2.18.0_build/share/nest/sli:$SLI_PATH
-export CPLUS_INCLUDE_PATH=//home/username/path_to_your/nest-simulator-2.18.0_build/include/nest
+export CPLUS_INCLUDE_PATH=/home/username/path_to_your/nest-simulator-2.18.0_build/include/nest
 ```
 
 ### Prerequisites
