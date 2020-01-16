@@ -1,7 +1,14 @@
-import numpy as np 
-import pylab as pl 
-import nest 
+import numpy as np
+import pylab as pl
+import nest
 
+
+nest.SetKernelStatus(
+            {'resolution': self.dt,
+             "data_path": self.data_path,
+             "overwrite_files": True,
+             "print_time": False,
+             })
 nest.set_verbosity("M_WARNING")
 
 # Create neuron
@@ -50,29 +57,29 @@ for neuron in epop1:
 # or
 dVms = [{"V_m": Vrest+(Vth-Vrest)*np.random.rand()} for x in epop1]
 nest.SetStatus(epop1, dVms)
-# or 
+# or
 Vms = Vrest+(Vth-Vrest)*np.random.rand(len(epop1))
 nest.SetStatus(epop1, "V_m", Vms)
-
 
 
 # Specifying the behaviour of devices
 # http://www.nest-simulator.org/helpindex/cc/RecordingDevice.html
 # multimeter
 multimeter = nest.Create("multimeter")
-nest.SetStatus(multimeter, {"withtime":True, "record_from":["V_m"]})
+nest.SetStatus(multimeter, {"withtime": True, "record_from": ["V_m"]})
 
 recdict = {
-    "to_memory": False, 
+    "to_memory": False,
     "to_file": True,
     "label": "epop_mp"}  # label is output filename
 
 mm1 = nest.Create("multimeter", params=recdict)
 
 # spikedetector
-spikedetector = nest.Create("spike_detector", params={"withgid":True, "withtime":True})
+spikedetector = nest.Create("spike_detector", params={
+                            "withgid": True, "withtime": True})
 
-# Connect 
+# Connect
 # Connect(pre, post, conn_spec=None, syn_spec=None, model=None)
 nest.Connect(multimeter, neuron)
 nest.Connect(multimeter, pop2)
@@ -92,7 +99,7 @@ ipop1 = nest.Create("iaf_psc_alpha", 10)
 conn_dict_ex = {"rule": "fixed_indegree", "indegree": Ke}
 conn_dict_in = {"rule": "fixed_indegree", "indegree": Ki}
 conn_dict_in = {"rule": "fixed_outdegree", "outdegree": Ki}
-conn_dict_in = {"rule": "fixed_total_number", "N":10}
+conn_dict_in = {"rule": "fixed_total_number", "N": 10}
 conn_dict_in = {"rule": "pairwise_bernoulli",
                 "p": 0.1,
                 "autapses": False,
@@ -102,9 +109,9 @@ syn_dict_ex = {"delay": d, "weight": Je}
 syn_dict_in = {"delay": d, "weight": Ji}
 nest.Connect(epop1, ipop1, conn_dict_ex, syn_dict_ex)
 nest.Connect(ipop1, epop1, conn_dict_in, syn_dict_in)
-nest.Connect(ipop1, epop1, 
-    conn_spec=conn_dict_in, 
-    syn_spec=syn_dict_in)
+nest.Connect(ipop1, epop1,
+             conn_spec=conn_dict_in,
+             syn_spec=syn_dict_in)
 
 
 n = 10
@@ -112,7 +119,6 @@ A = Create("iaf_psc_alpha", n)
 B = Create("iaf_psc_alpha", n)
 CopyModel("static_synapse", "excitatory", {"weight": 2.5, "delay": 0.5})
 Connect(A, B, syn_spec="excitatory")
-
 
 
 # distribution of synapse parameters
@@ -170,3 +176,13 @@ syn_dict_ex = {"weight": 1.2}
 syn_dict_in = {"weight": -2.0}
 nest.Connect(noise_ex, neuron, syn_spec=syn_dict_ex)
 nest.Connect(noise_in, neuron, syn_spec=syn_dict_in)
+
+
+# Efficient way to manage large data from recorders
+mm = nest.Create('multimeter', params={'record_from': ['V_m', 'g_ex', 'g_in']})
+nest.Simulate(2000)
+res.to_pickle('data.pkl')
+res.loc[123]
+# would give you all lines in the dataframe with GID 123 as sender.
+# Since 'senders' are set as dataframe index, this should be efficient
+pd.read_csv()  # to load from disk

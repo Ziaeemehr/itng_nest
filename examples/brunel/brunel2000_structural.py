@@ -32,7 +32,7 @@ class Brunel2000(object):
     simtime = 1000.0
     delay = 1.5  # synaptic delay in ms
 
-    g = 4.0  # ratio inhibitory weight/excitatory weight
+    g = 5.0  # ratio inhibitory weight/excitatory weight
     eta = 2.0  # external rate relative to threshold rate
     epsilon = 0.1
 
