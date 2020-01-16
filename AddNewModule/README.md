@@ -16,6 +16,8 @@ export SLI_PATH=/home/username/path_to_your/nest-simulator-2.18.0_build/share/ne
 export CPLUS_INCLUDE_PATH=/home/username/path_to_your/nest-simulator-2.18.0_build/include/nest
 ```
 
+# FROM C++ CODES
+
 ### Prerequisites
 Download, build and install NEST. NEST should be built outside the source code directory.
 Install CMake version 2.8.12 or later.
@@ -59,3 +61,48 @@ make install
 ```python
 nest.Install("mymodule")
 ```
+
+
+You should now see `pif_psc_alpha` in the `modeldict` and `drop_odd_spike` in the `synapsedict`. You can learn more about these models and the additional (meaningless) connection function supplied by the model by typing
+
+```python
+nest.helpdesk()
+```
+and find the model there.
+
+# FROM NESTML
+
+
+### Installing NESTML
+
+```{r, engine='bash'}
+sudo -H pip3 install nestml  #[or pip for python2.7]
+pip3 install nestml --user #[without sudo access]
+```
+
+### using pynestml
+```python
+from pynestml.frontend.pynestml_frontend import to_nest, install_nest
+```
+Subsequently
+```python
+from pynestml.frontend.pynestml_frontend import to_nest, install_nest
+to_nest(input_path="/home/work/mymodel", target_path="/home/work/mymodel_build/")
+install_nest("/home/work/mymodel_build/", "/home/work/nest-install-build")
+nest.Install("nestmymodule")
+```
+
+`/home/work/mymodel` is where you put `*.nestml` files.
+`/home/work/mymodel_build/` is where you build the model. the cpp and header files is build here.
+`/home/work/nest-install-build` is where the nest installed (not the source files).
+
+#### In PyNEST, use
+
+```python
+nest.Install("mymodel")
+```
+
+
+
+### Further reading
+For an in-depth introduction to the underlying modeling language NESTML, please refer to the [NESTML language documentation](https://github.com/nest/nestml/blob/master/doc/nestml_language.md).
