@@ -2,22 +2,6 @@
 #
 # hill_tononi_Vp.py
 #
-# This file is part of NEST.
-#
-# Copyright (C) 2004 The NEST Initiative
-#
-# NEST is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 2 of the License, or
-# (at your option) any later version.
-#
-# NEST is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with NEST.  If not, see <http://www.gnu.org/licenses/>.
 
 # ! ===========================================
 # ! NEST Topology Module: A Case-Based Tutorial
@@ -141,8 +125,6 @@
 # ! Please make sure that your ``PYTHONPATH`` is set correctly, so
 # ! that Python can find the NEST Python module.
 
-# ! **Note:** By default, the script does not show any graphics.
-# ! Set ``SHOW_FIGURES`` to ``True`` to activate graphics.
 
 # ! This example uses the function GetLeaves, which is deprecated. A
 # ! deprecation warning is therefore issued. For details about deprecated
@@ -150,17 +132,9 @@
 
 
 import pylab
-SHOW_FIGURES = False
 
-if not SHOW_FIGURES:
-    pylab_show = pylab.show
+pylab_show = pylab.show
 
-    def nop(s=None):
-        pass
-
-    pylab.show = nop
-else:
-    pylab.ion()
 
 # ! Introduction
 # !=============
@@ -890,4 +864,3 @@ for t in pylab.arange(Params['sim_interval'], Params['simtime'],
 
 # ! just for some information at the end
 print(nest.GetKernelStatus())
-pylab.show()

@@ -41,12 +41,13 @@ b = topo.CreateLayer({'columns': 30,
                       'elements': 'iaf_psc_alpha',
                       'edge_wrap': True})
 
-topo.ConnectLayers(a, b, {'connection_type': 'convergent',
-                          'mask': {'rectangular': {'lower_left': [-0.2, -0.5],
-                                                   'upper_right': [0.2, 0.5]}},
-                          'kernel': 0.5,
-                          'weights': {'uniform': {'min': 0.5, 'max': 2.0}},
-                          'delays': 1.0})
+conndict = {'connection_type': 'convergent',
+            'mask': {'rectangular': {'lower_left': [-0.2, -0.5],
+                                     'upper_right': [0.2, 0.5]}},
+            'kernel': 0.5,
+            'weights': {'uniform': {'min': 0.5, 'max': 2.0}},
+            'delays': 1.0}
+topo.ConnectLayers(a, b, conndict)
 
 fig, ax = pylab.subplots(1)
 
@@ -85,4 +86,4 @@ ax.axis([-2.0, 2.0, -2.0, 2.0])
 ax.set_aspect('equal', 'box')
 ax.set_title('Connection sources')
 
-pylab.savefig("figs/conncon.png")
+pylab.savefig("figs/conncon_sources.png")
