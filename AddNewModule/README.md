@@ -6,7 +6,7 @@ suppose you have installed nest here:
 
 -  in `.bashrc` or `.zshrc`:
 
-```
+```sh
 export NEST_INSTALL_DIR=/home/username/path_to_your/nest-simulator-2.18.0_build
 export NEST_MODULE_PATH=//home/username/path_to_your/nest-simulator-2.18.0_build/lib/nest:$NEST_MODULE_PATH
 export SLI_PATH=/home/username/path_to_your/nest-simulator-2.18.0_build/share/nest/sli:$SLI_PATH
@@ -27,7 +27,7 @@ As a starting point, try to build MyModule as follows:
 
 2. Create a build directory for it on the same level as MyModule (e.g. mmb)
 
-```{r, engine='bash', count_lines}
+```sh
 cd /path/to/MyModule
 cd ..
 mkdir mmb
@@ -37,7 +37,7 @@ cd mmb
 
 3. Configure. The configure process uses the script nest-config to find out where NEST is installed, where the source code resides, and which compiler options were used for compiling NEST. If nest-config is not in your path, you need to provided it explicitly like this
 
-```{r, engine='bash'}
+```sh
 cmake -Dwith-nest=${NEST_INSTALL_DIR}/bin/nest-config ../MyModule
 ```
 
@@ -45,7 +45,7 @@ MyModule will then be installed to `${NEST_INSTALL_DIR}`. This ensures that NEST
 
 4. Compile.
 
-```{r, engine='bash'}
+```sh
 make
 make install
 ```
@@ -72,7 +72,7 @@ and find the model there.
 
 ### Installing NESTML
 
-```{r, engine='bash'}
+```sh
 sudo -H pip3 install nestml  #[or pip for python2.7]
 pip3 install nestml --user #[without sudo access]
 ```
@@ -86,7 +86,7 @@ Subsequently
 from pynestml.frontend.pynestml_frontend import to_nest, install_nest
 to_nest(input_path="/home/work/mymodel", target_path="/home/work/mymodel_build/")
 install_nest("/home/work/mymodel_build/", "/home/work/nest-install-build")
-nest.Install("nestmymodule")
+nest.Install("mymodule")
 ```
 
 `/home/work/mymodel` is where you put `*.nestml` files.
