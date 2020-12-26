@@ -26,8 +26,8 @@ ndict = {"I_e": 200.0, "tau_m": 20.0}
 # nest.SetDefaults(model, params)
 nest.SetDefaults("iaf_psc_alpha", ndict)
 
-print nest.GetStatus(neuronpop[1:10], "I_e")
-print nest.GetDefaults('iaf_psc_alpha')['tau_m']
+print (nest.GetStatus(neuronpop[1:10], "I_e"))
+print (nest.GetDefaults('iaf_psc_alpha')['tau_m'])
 
 
 # If batches of neurons should be of the same model but using

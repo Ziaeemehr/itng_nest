@@ -1,6 +1,25 @@
 """
-SeeAlso: traub_psc_alpha
+Name: wb_receptors - Wang buzsaki model with 
+
+Description:
+
+wb_receptors is an implementation of a modified Hodkin-Huxley model
+
+Spike Detection
+ Spike detection is done by a combined threshold-and-local-maximum search: if
+ there is a local maximum above a certain threshold of the membrane potential,
+ it is considered a spike.
+
+- AMPA, NMDA, GABA_A, and GABA_B conductance-based synapses with
+ beta-function (difference of two exponentials) time course.
+
+References:
+
+Wang, X.J. and Buzsaki, G., (1996) Gamma oscillation by synaptic inhibition in a hippocampal interneuronal network model. Journal of neuroscience, 16(20), pp.6402-6413.
+
+SeeAlso: hill_tononi
 """
+
 neuron wb_receptors:
   state:
     r integer # number of steps in the current refractory phase

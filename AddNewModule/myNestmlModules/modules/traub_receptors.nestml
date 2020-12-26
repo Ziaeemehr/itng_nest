@@ -1,31 +1,47 @@
+"""
+Name: traub_psc_alpha - Traub model according to Borgers 2017.
 
-neuron olm_receptors:
+Reduced Traub-Miles Model of a Pyramidal Neuron in Rat Hippocampus[1].
+parameters got from reference [2] chapter 5.
+
+
+Spike Detection
+ Spike detection is done by a combined threshold-and-local-maximum search: if
+ there is a local maximum above a certain threshold of the membrane potential,
+ it is considered a spike.
+
+- AMPA, NMDA, GABA_A, and GABA_B conductance-based synapses with
+ beta-function (difference of two exponentials) time course corresponding
+ to "hill_tononi" model.
+
+
+References:
+
+[1] R. D. Traub and R. Miles, Neuronal Networks of the Hippocampus,Cam- bridge University Press, Cambridge, UK, 1991.
+[2] Borgers, C., 2017. An introduction to modeling neuronal dynamics (Vol. 66). Cham: Springer.
+
+
+SeeAlso: hh_cond_exp_traub
+"""
+
+neuron traub_receptors:
   state:
     r integer # number of steps in the current refractory phase
   end
 
   initial_values:
-    V_m mV = -63.0 mV # Membrane potential
+    V_m mV = -70. mV # Membrane potential
 
-    function alpha_n_init real = 0.018 * (V_m / mV - 25.0) / (1.0 - exp(-(V_m / mV - 25.0) / 25.0))
-    function beta_n_init  real = 0.0036 * (35.0 - V_m / mV) / (1.0 - exp(-(35.0 - V_m / mV) / 12.0))
-    
-    function alpha_m_init real = 0.1*(V_m/mV+38.0)/(1.0-exp(-0.1*(V_m/mV+38.0)))
-    function beta_m_init  real = 4.0 * exp(-(V_m / mV + 65.0) / 18.0)
-    
-    function alpha_h_init real = 0.07 * exp(-(V_m / mV + 63.0) / 20.0)
-    function beta_h_init  real = 1.0 / (exp(-(V_m / mV + 33.0) / 10.0) + 1.0)
-    
-    function r_h_inf_init real = 1. / (1.0 + exp((V_m / mV + 84.) / 10.2))
+    function alpha_n_init real = 0.032 * (V_m / mV + 52.) / (1. - exp(-(V_m / mV + 52.) / 5.))     
+    function beta_n_init  real = 0.5 * exp(-(V_m / mV + 57.) / 40.)    
+    function alpha_m_init real = 0.32 * (V_m / mV + 54.) / (1.0 - exp(-(V_m / mV + 54.) / 4.))   
+    function beta_m_init  real = 0.28 * (V_m / mV + 27.) / (exp((V_m / mV + 27.) / 5.) - 1.)    
+    function alpha_h_init real = 0.128 * exp(-(V_m / mV + 50.0) / 18.0)
+    function beta_h_init  real = 4.0 / (1.0 + exp(-(V_m / mV + 27.) / 5.))
 
-    function Act_A_inf_init real = 1.0 / (1.0 + exp(-(V_m/mV + 14.0) / 16.6))
-    function Act_B_inf_init real = 1.0/(1.0 + exp((V_m/mV + 71.0)/7.3))    
-
+    Act_m real =  alpha_m_init / ( alpha_m_init + beta_m_init )     # Activation variable m for Na
     Inact_h real = alpha_h_init / ( alpha_h_init + beta_h_init )    # Inactivation variable h for Na
-    Act_n real = alpha_n_init / (alpha_n_init + beta_n_init)  # Activation variable n for K 
-    Act_r_h real = r_h_inf_init 
-    Act_A real = Act_A_inf_init
-    Act_B real = Act_B_inf_init
+    Act_n real = alpha_n_init / (alpha_n_init + beta_n_init)        # Activation variable n for K
 
     g_AMPA nS = 0.0 nS
     g_AMPA' nS/ms = 0.0 nS/ms
@@ -43,44 +59,32 @@ neuron olm_receptors:
 
   equations:
     
-    function I_syn_ampa pA = -g_AMPA * ( V_m - AMPA_E_rev )
-    function I_syn_nmda pA = -g_NMDA * ( V_m - NMDA_E_rev ) / ( 1 + exp( ( NMDA_Vact - V_m ) / NMDA_Sact ) )
-    function I_syn_gaba_a pA = -g_GABAA * ( V_m - GABA_A_E_rev )
-    function I_syn_gaba_b pA = -g_GABAB * ( V_m - GABA_B_E_rev )
-    recordable function I_syn pA = I_syn_ampa + I_syn_nmda + I_syn_gaba_a + I_syn_gaba_b
+    recordable function I_syn_ampa pA = -g_AMPA * ( V_m - AMPA_E_rev )
+    recordable function I_syn_nmda pA = -g_NMDA * ( V_m - NMDA_E_rev ) / ( 1 + exp( ( NMDA_Vact - V_m ) / NMDA_Sact ) )
+    recordable function I_syn_gaba_a pA = -g_GABAA * ( V_m - GABA_A_E_rev )
+    recordable function I_syn_gaba_b pA = -g_GABAB * ( V_m - GABA_B_E_rev )
+    recordable function I_syn pA = I_syn_ampa + I_syn_nmda + I_syn_gaba_a + I_syn_gaba_b  
     
-    function alpha_n real = 0.018 * (V_m / mV - 25.0) / (1.0 - exp(-(V_m / mV - 25.0) / 25.0))
-    function beta_n  real = 0.0036 * (35.0 - V_m / mV) / (1.0 - exp(-(35.0 - V_m / mV) / 12.0))
-    
-    function alpha_m real = 0.1*(V_m/mV+38.0)/(1.0-exp(-0.1*(V_m/mV+38.0)))
-    function beta_m  real = 4.0 * exp(-(V_m / mV + 65.0) / 18.0)
-    
-    function alpha_h real = 0.07 * exp(-(V_m / mV + 63.0) / 20.0)
-    function beta_h  real = 1.0 / (exp(-(V_m / mV + 33.0) / 10.0) + 1.0)
-
-    function Act_m_inf real = alpha_m / (alpha_m + beta_m)
-    function I_Na  pA = g_Na * Act_m_inf * Act_m_inf * Act_m_inf * Inact_h * ( V_m - E_Na )
+    function I_Na  pA = g_Na * Act_m * Act_m * Act_m * Inact_h * ( V_m - E_Na )
     function I_K   pA  = g_K * Act_n * Act_n * Act_n * Act_n * ( V_m - E_K )
     function I_L   pA = g_L * ( V_m - E_L )
-    function I_H   pA = g_H * Act_r_h * (V_m - E_H)
-    function I_A   pA = g_A * Act_A * Act_B * (V_m - E_A)
-
-    function r_h_inf real = 1. / (1.0 + exp((V_m / mV + 84.) / 10.2))
-    function tau_r_h real = 1. /(exp(-14.59-0.086*V_m/mV)+exp(-1.87+0.0701*V_m/mV))
-
-    function Act_A_inf real = 1.0 / (1.0 + exp(-(V_m/mV + 14.0) / 16.6))
-    function Act_B_inf real = 1.0/(1.0 + exp((V_m/mV + 71.0)/7.3))
-
-    function tau_A_A real = 5.0
-    function tau_B_A real = 1./(.000009/exp((V_m/mV-26.)/28.5)+.014/(.2+exp(-(V_m/mV + 70.)/11.)))
-
-
-    Inact_h' = ( alpha_h * ( 1 - Inact_h ) - beta_h * Inact_h ) / ms # h-variable
+    
+    V_m' =( -( I_Na + I_K + I_L ) + I_e + I_stim + I_syn ) / C_m
+    
+    # Act_n
+    function alpha_n real = 0.032 * (V_m / mV + 52.) / (1. - exp(-(V_m / mV + 52.) / 5.))
+    function beta_n  real = 0.5 * exp(-(V_m / mV + 57.) / 40.)
     Act_n' = ( alpha_n * ( 1 - Act_n ) - beta_n * Act_n ) / ms # n-variable
-    Act_r_h' = (r_h_inf - Act_r_h) / tau_r_h / ms # r-variable
-    Act_A' = (Act_A_inf - Act_A) / tau_A_A / ms   # A-variable
-    Act_B' = (Act_B_inf - Act_B) / tau_B_A / ms   # B-variable
-    V_m' =( -( I_Na + I_K + I_L + I_H + I_A ) + I_e + I_stim + I_syn ) / C_m
+
+    # Act_m
+    function alpha_m real = 0.32 * (V_m / mV + 54.) / (1.0 - exp(-(V_m / mV + 54.) / 4.))
+    function beta_m  real = 0.28 * (V_m / mV + 27.) / (exp((V_m / mV + 27.) / 5.) - 1.)
+    Act_m' = ( alpha_m * ( 1 - Act_m ) - beta_m * Act_m ) / ms # m-variable
+
+    # Inact_h'
+    function alpha_h real = 0.128 * exp(-(V_m / mV + 50.0) / 18.0)
+    function beta_h  real = 4.0 / (1.0 + exp(-(V_m / mV + 27.) / 5.))
+    Inact_h' = ( alpha_h * ( 1 - Inact_h ) - beta_h * Inact_h ) / ms # h-variable
     
     #############
     # Synapses
@@ -101,19 +105,15 @@ neuron olm_receptors:
   end
 
   parameters:
-    t_ref ms = 2.0 ms      # Refractory period 2.0
-    g_Na nS = 3000.0 nS    # Sodium peak conductance
-    g_K nS = 2300.0 nS      # Potassium peak conductance
-    g_L nS = 5.0 nS          # Leak conductance
-    g_H nS = 1200.0 nS
-    g_A nS = 2200.0 nS
-    C_m pF = 130.0 pF       # Membrane Capacitance
-    E_Na mV = 90.0 mV         # Sodium reversal potential
-    E_K mV = -100.0 mV        # Potassium reversal potentia
-    E_L mV = -70.0 mV     # Leak reversal Potential (aka resting potential)
-    E_H mV = -32.9 mV    # 
-    E_A mV = -90.0 mV
-    V_Tr mV = -20.0 mV        # Spike Threshold
+    t_ref ms = 2.0 ms       # Refractory period 2.0
+    g_Na nS = 10000.0 nS    # Sodium peak conductance
+    g_K nS = 8000.0 nS      # Potassium peak conductance
+    g_L nS = 10 nS          # Leak conductance
+    C_m pF = 100.0 pF       # Membrane Capacitance
+    E_Na mV = 50. mV        # Sodium reversal potential
+    E_K mV = -100. mV       # Potassium reversal potentia
+    E_L mV = -67. mV        # Leak reversal Potential (aka resting potential)
+    V_Tr mV = -20. mV       # Spike Threshold
     
     # Parameters for synapse of type AMPA, GABA_A, GABA_B and NMDA
     AMPA_g_peak nS = 0.1 nS      # peak conductance
